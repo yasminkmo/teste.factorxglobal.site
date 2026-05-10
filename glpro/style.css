@@ -103,10 +103,40 @@
 
 /* =========================================
     POP-UP DE COMPRA
+    ✅ CORRIGIDO: visibility:hidden e pointer-events:none
+    para o popup não aparecer vazio antes do JS preencher os dados
     ========================================= */
-.notification-popup { position: fixed; left: 20px; bottom: 20px; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.2); border-radius: 4px; display: flex; align-items: center; padding: 10px; z-index: 1000; opacity: 0; transition: opacity 0.5s, bottom 0.5s; }
-.notification-popup.show { opacity: 1; bottom: 40px; }
-.notification-popup.hide { opacity: 0; bottom: 20px; }
+.notification-popup {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.5s, bottom 0.5s, visibility 0.5s;
+}
+
+.notification-popup.show {
+    opacity: 1;
+    bottom: 40px;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.notification-popup.hide {
+    opacity: 0;
+    bottom: 20px;
+    visibility: hidden;
+    pointer-events: none;
+}
+
 .notification-content { display: flex; align-items: center; }
 .profile-image { height: 40px; display: block; }
 .profile-cropper { overflow: hidden; border-radius: 10%; margin-right: 10px; border: 1px solid gray; }
