@@ -4,12 +4,9 @@
 
 const CONFIG = {
     // ⏱️ Tempo de Delay: Formato "Minutos:Segundos"
-    // Exemplo: "48:55", "12:00" ou "00:15"
     tempoDeDelay: "00:01",
 
     // 🔗 Links de Checkout dos Botões
-    // Tracking (UTMs, subid, fbclid etc.) é responsabilidade do UTMify — ele
-    // reescreve os hrefs automaticamente no carregamento da página.
     linkPote2: "https://magazinetype2.online/b?p=GLPPT2V1&b=132&fid=472&fnid=2&pfnid=1&pg=8395&aff_id=241183",
     linkPote6: "https://magazinetype2.online/b?p=GLPPT6V1&b=132&fid=472&fnid=2&pfnid=1&pg=8395&aff_id=241183",
     linkPote3: "https://magazinetype2.online/b?p=GLPPT3V1&b=132&fid=472&fnid=2&pfnid=1&pg=8395&aff_id=241183"
@@ -19,13 +16,6 @@ const CONFIG = {
 // 💻 CÓDIGO DO SISTEMA (Não precisa alterar nada daqui para baixo)
 // =====================================================================
 
-// ---------------------------------------------------------------------
-// DOM Ready
-// ---------------------------------------------------------------------
-// IMPORTANTE: este script é carregado de forma lazy pelo index.html (após
-// 20s, scroll ou click). Quando ele finalmente roda, o DOMContentLoaded
-// já disparou — então usamos um wrapper que executa imediatamente se o
-// DOM já estiver pronto, ou agenda para quando ficar pronto.
 function onDomReady(callback) {
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', callback);
@@ -37,8 +27,6 @@ function onDomReady(callback) {
 onDomReady(function() {
 
     // 1. APLICAR LINKS DE CHECKOUT
-    // Tracking é responsabilidade do UTMify — ele intercepta os hrefs e injeta
-    // UTMs, subid, fbclid e click IDs automaticamente. Aqui só setamos a base.
     document.getElementById('card-2-bottles').href = CONFIG.linkPote2;
     document.getElementById('card-6-bottles').href = CONFIG.linkPote6;
     document.getElementById('card-3-bottles').href = CONFIG.linkPote3;
@@ -52,18 +40,13 @@ onDomReady(function() {
         return totalSegundos * 1000;
     }
 
-    // O QUE ESTÁ AQUI DENTRO SÓ ACONTECE APÓS O TEMPO DO DELAY
     setTimeout(() => {
-        // A. Revela a área com os botões e garantia
         document.querySelector('.video-cta-container').style.display = 'block';
-
-        // B. Inicia os pop-ups de vendas falsas apenas agora!
         startAllNotifications();
-
     }, calcularDelayEmMilissegundos(CONFIG.tempoDeDelay));
 
 
-    // 3. SISTEMA DO CONTADOR DE PESSOAS ASSISTINDO (Roda desde o início)
+    // 3. SISTEMA DO CONTADOR DE PESSOAS ASSISTINDO
     function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1) + min); }
     function updateCounter() {
         var currentCount = parseInt(document.getElementById('viewsCount').textContent.replace(/,/g, ''), 10);
@@ -103,12 +86,19 @@ onDomReady(function() {
             updateNotificationContent(name, state.name, product, image);
 
             setTimeout(() => {
+                // ✅ CORRIGIDO: mostra o popup APENAS depois de preencher os dados
+                purchaseNotification.style.display = 'flex';
                 purchaseNotification.classList.add('show');
+
                 setTimeout(() => {
                     purchaseNotification.classList.remove('show');
                     purchaseNotification.classList.add('hide');
-                    setTimeout(() => purchaseNotification.classList.remove('hide'), 500);
-                }, 10000); // Fica na tela por 10 segundos
+                    setTimeout(() => {
+                        purchaseNotification.classList.remove('hide');
+                        // ✅ CORRIGIDO: esconde completamente ao sair
+                        purchaseNotification.style.display = 'none';
+                    }, 500);
+                }, 10000);
             }, 500);
         }
 
@@ -116,10 +106,9 @@ onDomReady(function() {
             setTimeout(() => {
                 showNotification();
                 startRandomInterval();
-            }, Math.random() * (30000 - 10000) + 11000); // Próximas demoram entre 11s e 30s
+            }, Math.random() * (30000 - 10000) + 11000);
         }
 
-        // Mostra a primeira notificação 2 segundos APÓS os botões aparecerem
         setTimeout(() => {
             showNotification();
             startRandomInterval();
