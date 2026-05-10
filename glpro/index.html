@@ -28,7 +28,7 @@ src="https://www.facebook.com/tr?id=2608749199544480&ev=PageView&noscript=1"
 <link rel="dns-prefetch" href="https://images.converteai.net">
 <link rel="dns-prefetch" href="https://api.vturb.com.br">
 
-       <script
+    <script
   src="https://cdn.utmify.com.br/scripts/utms/latest.js"
   data-utmify-prevent-xcod-sck
   async
@@ -47,14 +47,12 @@ src="https://www.facebook.com/tr?id=2608749199544480&ev=PageView&noscript=1"
         #counterContainer { display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; padding: 10px; margin-bottom: 20px; }
         #counterWrapper { font-weight: bold; font-size: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
         #viewsCount { font-size: 16px; color: #d9534f; font-weight: bold; }
-        .live-icon { width: 18px; height: 18px; }
         #importantMessage { font-size: 14px; font-weight: bold; color: black; margin-top: 10px; }
         .loading { font-size: 12px; color: #666; margin-top: 5px; animation: blink 1.5s infinite alternate; }
         @keyframes blink { from { opacity: 1; } to { opacity: 0.5; } }
-        .video-cta-container { display: none; } /* OCULTO INICIALMENTE (O JS REVELA) */
+        .video-cta-container { display: none; }
     </style>
 
-    <!-- CSS não-crítico (lazy: media=print trick, não bloqueia o render) -->
     <link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="style.css"></noscript>
 </head>
@@ -63,11 +61,13 @@ src="https://www.facebook.com/tr?id=2608749199544480&ev=PageView&noscript=1"
     <div class="container">
 
         <!-- VSL -->
-        <vturb-smartplayer id="vid-6a000bab660e8c12a98e2afe" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"></vturb-smartplayer> <script type="text/javascript"> var s=document.createElement("script"); s.src="https://scripts.converteai.net/8374fd29-86de-48bc-960b-6d93c00208eb/players/6a000bab660e8c12a98e2afe/v4/player.js", s.async=!0,document.head.appendChild(s); </script>
+        <vturb-smartplayer id="vid-6a000bab660e8c12a98e2afe" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"></vturb-smartplayer>
+        <script type="text/javascript"> var s=document.createElement("script"); s.src="https://scripts.converteai.net/8374fd29-86de-48bc-960b-6d93c00208eb/players/6a000bab660e8c12a98e2afe/v4/player.js", s.async=!0,document.head.appendChild(s); </script>
 
         <div id="counterContainer">
             <div id="counterWrapper">
-                <img src="images/live-icon.png" class="live-icon" alt="Live Viewers">
+                <!-- ✅ CORRIGIDO: emoji no lugar do live-icon.png que não existe -->
+                <span style="font-size: 18px; line-height: 1;">👁️</span>
                 <span id="viewsCount">71,712</span>
                 <span style="color: black;">people watching now</span>
             </div>
@@ -161,7 +161,8 @@ src="https://www.facebook.com/tr?id=2608749199544480&ev=PageView&noscript=1"
         </div>
     </div>
 
-    <div id="purchase-notification" class="notification-popup">
+    <!-- ✅ CORRIGIDO: display:none garante que o popup nunca aparece vazio -->
+    <div id="purchase-notification" class="notification-popup" style="display:none">
         <div class="notification-content">
             <div class="profile-cropper">
                 <img src="" alt="Profile Image" class="profile-image">
@@ -173,7 +174,7 @@ src="https://www.facebook.com/tr?id=2608749199544480&ev=PageView&noscript=1"
         </div>
     </div>
 
-    <!-- UTMify (captura e persiste UTMs) -->
+    <!-- UTMify -->
     <script
       src="https://cdn.utmify.com.br/scripts/utms/latest.js"
       data-utmify-prevent-xcod-sck
@@ -181,11 +182,6 @@ src="https://www.facebook.com/tr?id=2608749199544480&ev=PageView&noscript=1"
       defer
     ></script>
 
-    <!-- ============================================================
-         CAMADA 3 — script.js com defer
-         Baixa em paralelo com o VTurb (que tem prioridade absoluta via preload)
-         Executa só depois do HTML parseado → não bloqueia o render inicial
-         ============================================================ -->
     <script src="script.js" defer></script>
 
 </body>
